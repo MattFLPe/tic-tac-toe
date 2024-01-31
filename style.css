@@ -2,6 +2,9 @@
     display: grid;
     grid-template-columns: repeat(3, 100px);
     gap: 5px;
+    align-content: center;
+    justify-content: center;
+    margin-top: 20px;
 }
 
 .cell {
@@ -16,6 +19,18 @@
 }
 
 .status {
+    display: flex;
+    flex-direction: row;
+    justify-items: center;
+    align-items: center;
     margin-top: 20px;
     font-size: 18px;
+}
+
+.container {
+    gap: 5px;
+    display: flex;
+    flex-direction: row;
+    align-items: center;
+    justify-items: center;
 }
