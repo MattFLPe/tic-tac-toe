@@ -18,11 +18,8 @@
     cursor: pointer;
 }
 
-.status {
-    display: flex;
-    flex-direction: row;
-    justify-items: center;
-    align-items: center;
+#status {
+    text-align: center;
     margin-top: 20px;
     font-size: 18px;
 }
@@ -33,4 +30,6 @@
     flex-direction: row;
     align-items: center;
     justify-items: center;
+    margin: 0 auto;
+    width: 600px;
 }
