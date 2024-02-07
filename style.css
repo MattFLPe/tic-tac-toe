@@ -25,11 +25,5 @@
 }
 
 .container {
-    gap: 5px;
-    display: flex;
-    flex-direction: row;
-    align-items: center;
-    justify-items: center;
-    margin: 0 auto;
-    width: 600px;
+    text-align: center;
 }
