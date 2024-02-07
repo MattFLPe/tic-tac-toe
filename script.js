@@ -1,50 +1,42 @@
 const gameBoard = (() => {
     let board = ['', '', '', '', '', '', '', '', ''];
     let currentPlayer = "X";
-
+    
 
     const displayBoard = () => {
-        let boardHTML = "";
-        board.forEach((cell, index) => {
-            boardHTML += `<div class="cell" id="cell-${index}">${cell}</div>`
-        });
-        document.querySelector("#board").innerHTML = boardHTML;
-
-        document.querySelectorAll('.cell').forEach((cell, index) => {
-            cell.addEventListener('click', () => {
-                cellClick(cell);
-            });
+        const cells = document.querySelectorAll('.cell');
+        cells.forEach((cell, index) => {
+        cell.textContent = board[index];
     });
     };
 
-    const cellClick = (cell) => {
-        const cellIndex = parseInt(cell.id.split('-')[1]);
-        if (!board[cellIndex]) {
+    const clickCell = (cellIndex) => {
+        if(!Game.isGameOver()){
+        if (board[cellIndex] === '') {
             board[cellIndex] = currentPlayer;
-            cell.textContent = currentPlayer;
             currentPlayer = currentPlayer === "X" ? "O" : "X";
+            displayBoard();
             Game.checkWinner();
-        } else {
-            alert("Cell already filled!");
-        }
+        } 
     };
+};
 
-    
     const resetBoard = () => {
         board = ['', '', '', '', '', '', '', '', ''];
+        
         displayBoard();
+        gameOver = false;
+        currentPlayer = "X";
+
     };
 
-    const endGame = () => {
-        console.log("Game Over!");
-    };
 
-
-    return { displayBoard, cellClick, resetBoard, endGame, board };
+    return { displayBoard, clickCell, resetBoard, board };
     })();
 
-const Player = (name, symbol) => {
-    return {name, symbol};
+
+const Player = (symbol) => {
+    return {symbol};
 };
 
 const Game = (() => {
@@ -52,18 +44,23 @@ const Game = (() => {
     let currentPlayer;
     let gameOver;
     
+    
     const startGame = () => {
+
         players = [
-            Player(document.querySelector("#player1").value, "X"),
-            Player(document.querySelector("#player2").value, "O")
+            Player("X"),
+            Player("O")
         ];
 
         currentPlayer = 0;
-        gameOver = false;
         gameBoard.displayBoard();
-    };
+        gameOver = false;
 
-    const checkWinner = () => {
+    };
+    
+    const checkWinner = () => { 
+        let gameOver = false;
+        console.log("lol")
         const winConditions = [
             [0, 1, 2],
             [3, 4, 5],
@@ -75,38 +72,48 @@ const Game = (() => {
             [2, 4, 6]
         ];
 
-
+        
         for(const condition of winConditions){
             const [a, b, c] = condition;
-            if (gameBoard.board[a] && gameBoard.board[a] === gameBoard.board[b] && gameBoard.board[a] === gameBoard.board[c]) {
-                console.log(`Player ${gameBoard.board[a]} wins!`);
+            if (gameBoard.board[a] && gameBoard.board[a] === gameBoard.board[b] && 
+                gameBoard.board[a] === gameBoard.board[c]) {
                 let winnerStatus = document.querySelector("#status");
                 winnerStatus.innerHTML = `Player ${gameBoard.board[a]} wins!`;
-                gameBoard.endGame();
+                Game.setGameOver();;
                 return;
-        }
+        } 
     };
 
     // Check for a tie
-    if (!gameBoard.board.includes('')) {
-        let winnerStatus = document.querySelector('#status');
-        winnerStatus.innerHTML = 'It\'s a tie!';
-        gameBoard.endGame();
-      };
-    };
+ if (!gameBoard.board.includes('')) {
+    let winnerStatus = document.querySelector('#status');
+    winnerStatus.innerHTML = 'It\'s a tie!';
+    Game.setGameOver();
+    return;
+  };
 
-     return { startGame, checkWinner }
+};
+
+const isGameOver = () => {
+    return gameOver;
+}
+
+const setGameOver = () => {
+    gameOver = true;
+};
+
+     return { startGame, checkWinner, isGameOver, setGameOver }
 })();
 
-const startBtn = document.querySelector("#start-btn");
-        startBtn.addEventListener("click", () => {
-            Game.startGame();
-        });
+const cells = document.querySelectorAll('.cell');
+cells.forEach((cell, index) => {
+    cell.addEventListener('click', () => {
+        gameBoard.clickCell(index);
+    });
+});
 
 const restartBtn = document.querySelector("#restart-btn");
     restartBtn.addEventListener("click", () => {
-    document.querySelector('#status').innerHTML = '';       
-    gameBoard.resetBoard();
-   
+        location.reload();
 });
 
